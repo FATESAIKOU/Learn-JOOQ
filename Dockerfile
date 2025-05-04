@@ -1,18 +1,14 @@
+# Use GraalVM for building the native image
 FROM ghcr.io/graalvm/native-image-community:21 AS builder
-
-# Install necessary tools, including xargs
-RUN microdnf install -y findutils zlib && \
-    microdnf clean all
 
 WORKDIR /app
 
+# Copy project files
 COPY . .
 
 # Build the native image
-RUN ./gradlew build -x test && \
-    ./gradlew nativeCompile
+RUN ./gradlew clean nativeCompile
 
-# Use the same GraalVM image for runtime
 FROM ghcr.io/graalvm/native-image-community:21
 
 WORKDIR /app

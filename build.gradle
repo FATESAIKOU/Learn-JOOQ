@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.5' // Updated to a stable version
+	id 'org.springframework.boot' version '3.1.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.graalvm.buildtools.native' version '0.10.6'
 }
@@ -10,7 +10,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21) // Ensure JDK 21 is installed
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -22,17 +22,29 @@ configurations {
 
 repositories {
 	mavenCentral()
+	// For mybatis-spring-native snapshot
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
+	// Core Spring Boot starters
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-jooq'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc' // Add JDBC starter
-	implementation 'com.h2database:h2' // Example database, replace with your DB
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2' // Add MyBatis starter
-	implementation 'org.springframework.boot:spring-boot-starter-web' // Add Spring MVC starter
-	implementation 'org.postgresql:postgresql:42.6.0' // Add PostgreSQL driver
+
+	// Database dependencies
+	implementation 'com.h2database:h2' // You can switch to another DB if needed
+	implementation 'org.postgresql:postgresql:42.6.0'
+
+	// MyBatis with native image support
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+	implementation 'org.mybatis.spring.native:mybatis-spring-native-core:0.1.0-SNAPSHOT'
+
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -40,14 +52,7 @@ dependencies {
 graalvmNative {
 	binaries {
 		main {
-			mainClass = 'com.fatesaikou.test.jooq.learn.JooqtestApplication' // Specify the main class
-			// Add MyBatis reflection and static initialization configuration
-			buildArgs.addAll(
-				'--initialize-at-build-time=org.apache.ibatis.logging.LogFactory',
-				'--initialize-at-build-time=org.mybatis.logging.LoggerFactory',
-				'--initialize-at-build-time=org.mybatis.spring.mapper.ClassPathMapperScanner',
-				'--initialize-at-build-time=org.mybatis.spring.annotation.MapperScan'
-			)
+			mainClass = 'com.fatesaikou.test.jooq.learn.JooqtestApplication'
 		}
 	}
 }
