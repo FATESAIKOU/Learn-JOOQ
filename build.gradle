@@ -30,10 +30,19 @@ dependencies {
 	implementation 'com.h2database:h2' // Example database, replace with your DB
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2' // Add MyBatis starter
 	implementation 'org.springframework.boot:spring-boot-starter-web' // Add Spring MVC starter
+	implementation 'org.postgresql:postgresql:42.6.0' // Add PostgreSQL driver
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+graalvmNative {
+	binaries {
+		main {
+			mainClass = 'com.fatesaikou.test.jooq.learn.JooqtestApplication' // Specify the main class
+		}
+	}
 }
 
 tasks.named('test') {

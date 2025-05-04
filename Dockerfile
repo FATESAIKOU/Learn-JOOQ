@@ -1,20 +1,20 @@
-# Use GraalVM as the base image
-FROM ghcr.io/graalvm/native-image:ol8-java21-22.3.1 as builder
+FROM ghcr.io/graalvm/native-image-community:21 AS builder
 
-# Set working directory
+# Install necessary tools, including xargs
+RUN microdnf install -y findutils zlib && \
+    microdnf clean all
+
 WORKDIR /app
 
-# Copy the project files
 COPY . .
 
 # Build the native image
 RUN ./gradlew build -x test && \
     ./gradlew nativeCompile
 
-# Use a minimal base image for the final executable
-FROM gcr.io/distroless/base-debian11
+# Use the same GraalVM image for runtime
+FROM ghcr.io/graalvm/native-image-community:21
 
-# Set working directory
 WORKDIR /app
 
 # Copy the native executable from the builder stage

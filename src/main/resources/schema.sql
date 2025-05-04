@@ -1,5 +1,5 @@
-CREATE TABLE todos (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS todos (
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     completed BOOLEAN NOT NULL
