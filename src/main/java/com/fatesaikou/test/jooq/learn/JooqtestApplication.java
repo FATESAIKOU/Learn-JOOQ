@@ -1,9 +1,11 @@
-package com.fatesaikou.test.jooq.jooqtest;
+package com.fatesaikou.test.jooq.learn;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication // Ensure this annotation is correctly placed
+@MapperScan("com.fatesaikou.test.jooq.learn.mapper")
 public class JooqtestApplication {
 
 	public static void main(String[] args) {
