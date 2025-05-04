@@ -41,6 +41,13 @@ graalvmNative {
 	binaries {
 		main {
 			mainClass = 'com.fatesaikou.test.jooq.learn.JooqtestApplication' // Specify the main class
+			// Add MyBatis reflection and static initialization configuration
+			buildArgs.addAll(
+				'--initialize-at-build-time=org.apache.ibatis.logging.LogFactory',
+				'--initialize-at-build-time=org.mybatis.logging.LoggerFactory',
+				'--initialize-at-build-time=org.mybatis.spring.mapper.ClassPathMapperScanner',
+				'--initialize-at-build-time=org.mybatis.spring.annotation.MapperScan'
+			)
 		}
 	}
 }
