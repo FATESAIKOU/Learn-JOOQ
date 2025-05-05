@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tododb
+    username: todo
+    password: todo
+    driver-class-name: org.postgresql.Driver
+  jooq:
+    sql-dialect: postgres
+
+server:
+  port: 8080
