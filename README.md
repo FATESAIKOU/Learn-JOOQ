@@ -3,62 +3,61 @@
 ## 技術棧
 - Gradle
 - Spring Boot 3.4.5
-- JOOQ
+- JOOQ（含 codegen 型別安全）
 - Postgres
 - Docker + Docker Compose
 
 ## 開發與測試流程
 
-### 1. 編譯專案
+### 本地應用程式啟動 & 測試
 ```sh
-./gradlew build
+# 啟動 postgresdb + JOOQ CodeGen
+$ docker-compose up -d db && \
+  ./gradlew generateJooq
+
+# Application Launch
+$ ./gradlew bootRun or test
 ```
 
-### 2. 執行單元測試
+### 程式編譯
 ```sh
-./gradlew test
+# 啟動 postgresdb + JOOQ CodeGen
+$ docker-compose up -d db && \
+  ./gradlew generateJooq && \
+  docker-compose down
+
+# Application Launch
+$ ./gradlew build
 ```
 
-### 3. 啟動 Postgres（僅資料庫）
+### docker-compose 整組啟動
 ```sh
-docker-compose -f docker-compose-db.yml up -d
+# 啟動 postgresdb + JOOQ CodeGen
+$ docker-compose up -d db && \
+  ./gradlew generateJooq
+
+# 啟動 application
+$ docker-compose up
 ```
 
-### 4. 啟動 Application（本地）
-```sh
-./gradlew bootRun
-```
+## 測試用 curl 指令
 
-### 5. 使用 Docker Compose 一起啟動 Application + DB
-
-本專案已提供 multi-stage build 的 Dockerfile，無需本地先編譯，直接用 docker-compose 啟動：
-
-```sh
-docker-compose up --build
-```
-
-- 這會同時啟動 app 及 db 服務。
-- app 服務會自動在 container 內 build 並執行 Spring Boot。
-- db 服務會自動初始化 schema.sql。
-
-### 6. 測試用 curl 指令
-
-#### 建立 Todo
+### 建立 Todo
 ```sh
 curl -X POST http://localhost:8080/api/todos -H 'Content-Type: application/json' -d '{"title":"測試任務","description":"說明","completed":false}'
 ```
 
-#### 查詢 Todo 列表
+### 查詢 Todo 列表
 ```sh
 curl http://localhost:8080/api/todos
 ```
 
-#### 查詢單一 Todo
+### 查詢單一 Todo
 ```sh
 curl http://localhost:8080/api/todos/1
 ```
 
-#### 更新 Todo
+### 更新 Todo
 ```sh
 curl -X PUT http://localhost:8080/api/todos/1 -H 'Content-Type: application/json' -d '{"title":"新標題","description":"新說明","completed":true}'
 ```
