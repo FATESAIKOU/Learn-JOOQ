@@ -29,7 +29,19 @@ docker-compose -f docker-compose-db.yml up -d
 ./gradlew bootRun
 ```
 
-### 5. 測試用 curl 指令
+### 5. 使用 Docker Compose 一起啟動 Application + DB
+
+本專案已提供 multi-stage build 的 Dockerfile，無需本地先編譯，直接用 docker-compose 啟動：
+
+```sh
+docker-compose up --build
+```
+
+- 這會同時啟動 app 及 db 服務。
+- app 服務會自動在 container 內 build 並執行 Spring Boot。
+- db 服務會自動初始化 schema.sql。
+
+### 6. 測試用 curl 指令
 
 #### 建立 Todo
 ```sh
@@ -58,4 +70,4 @@ curl -X DELETE http://localhost:8080/api/todos/1
 
 ---
 
-如需 docker-compose 一起啟動 app + db，請再告知。
+如需 docker-compose 一起啟動 app + db，請參考上方說明。
